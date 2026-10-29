@@ -1,0 +1,21 @@
+name: Prompt Gate
+
+# 演示仓库：用 ai-prompt-toolkit 的 GitHub Action 给 prompt 文件做确定性门禁。
+# 红绿由 fail-on 决定：存在 high 及以上 finding 时，本 job 变红。
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  # 让 Action 把 SARIF 上传到 Code Scanning（公开仓库免费；私有仓库需 GHAS）
+  security-events: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: wqbcs/ai-prompt-toolkit@action/v1
+        with:
+          target: support_agent.md
+          fail-on: high
